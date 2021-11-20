@@ -16,7 +16,7 @@ export default function Home() {
         <h1>{"Simple, bloat-free UX tools"}</h1>
         <span>
           {
-            "SimpleUX empowers UX professionals through a suite of bullshit-free tools and educational resources that are available at whatever price point you can afford."
+            "SimpleUX empowers UX professionals through a suite of bullshit-free tools and educational resources that are available at whatever price point you can afford. We operate transparently and our products are open-source."
           }
         </span>
       </header>
