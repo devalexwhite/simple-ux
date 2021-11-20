@@ -5,21 +5,15 @@ const CardList = ({
   id,
   title,
   children,
-  onCardDrop,
+  onDrop,
   onDelete,
   onChangeTitle,
   locked = false,
 }) => {
-  const ondrop = (ev) => {
-    ev.preventDefault();
-    const data = ev.dataTransfer.getData("text/plain");
-    onCardDrop(data);
-  };
-
   return (
     <DropZone
-      className={`border-2 flex flex-col bg-base-100 px-4 py-4 m-4 items-center ${styles.container}`}
-      ondrop={ondrop}
+      className={`z-10 border-2 flex flex-col bg-base-100 px-4 py-4 m-4 items-center ${styles.container}`}
+      ondrop={onDrop}
       id={id}
     >
       <input
@@ -33,7 +27,7 @@ const CardList = ({
         autoFocus
         disabled={locked}
       />
-      <div className={`flex-1 flex flex-col w-full  text-center`}>
+      <div className={`flex-1 flex flex-col w-full  text-center py-8`}>
         {children.length ? (
           children
         ) : (

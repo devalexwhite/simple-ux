@@ -92,19 +92,22 @@ export default function () {
   };
 
   const onZoneCardDrop = (ev) => {
-    console.log(ev);
     ev.preventDefault();
-    const data = ev.dataTransfer.getData("text/plain");
+
+    if (ev.dataTransfer.dropped) return;
+    ev.dataTransfer.dropped = true;
+
+    const cardId = ev.dataTransfer.getData("text/plain");
 
     setLists([
       ...lists.map((i) => ({
         ...i,
-        cards: [...i.cards.filter((c) => c != data)],
+        cards: [...i.cards.filter((c) => c != cardId)],
       })),
       {
         id: `${listCount}`,
         title: "",
-        cards: [data],
+        cards: [cardId],
         locked: false,
       },
     ]);
@@ -112,7 +115,15 @@ export default function () {
     setListCount(listCount + 1);
   };
 
-  const onListCardDrop = (listId, cardId) => {
+  const onListCardDrop = (listId, ev) => {
+    ev.preventDefault();
+
+    if (ev.dataTransfer.dropped) return;
+
+    ev.dataTransfer.dropped = true;
+
+    const cardId = ev.dataTransfer.getData("text/plain");
+
     const list = lists.find((i) => i.id === listId);
 
     setLists(
@@ -134,7 +145,7 @@ export default function () {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen h-screen">
       <div className="w-full py-4 px-4">
         <div className="px-2 pb-4">
           <progress
@@ -154,32 +165,32 @@ export default function () {
         </div>
       </div>
       <DropZone
-        id={"0"}
-        className="w-full py-16 border-2 font-bold bg-base-300 text-center"
+        id="card-dropzone"
+        className="z-0 flex-1 w-full  border-2 font-bold bg-base-300 text-center"
         ondrop={onZoneCardDrop}
       >
-        Drop a card here to form a group
+        <div className="text-xl py-8">Drop a card here to form a group</div>
+        <div className="flex flex-row overflow-y-auto">
+          {lists.map((i) => (
+            <div key={i.id}>
+              <CardList
+                id={i.id}
+                title={i.title}
+                onDrop={(ev) => onListCardDrop(i.id, ev)}
+                onDelete={onListDelete}
+                onChangeTitle={onChangeListTitle}
+                locked={i.locked}
+              >
+                {cards
+                  .filter((c) => i.cards.includes(c.id))
+                  .map((c) => (
+                    <Card title={c.title} id={c.id} key={c.key} />
+                  ))}
+              </CardList>
+            </div>
+          ))}
+        </div>
       </DropZone>
-      <div className="flex-1 flex flex-row overflow-y-auto">
-        {lists.map((i) => (
-          <div key={i.id}>
-            <CardList
-              id={i.id}
-              title={i.title}
-              onCardDrop={(id) => onListCardDrop(i.id, id)}
-              onDelete={onListDelete}
-              onChangeTitle={onChangeListTitle}
-              locked={i.locked}
-            >
-              {cards
-                .filter((c) => i.cards.includes(c.id))
-                .map((c) => (
-                  <Card title={c.title} id={c.id} key={c.key} />
-                ))}
-            </CardList>
-          </div>
-        ))}
-      </div>
       <div className="flex justify-between w-full px-8 py-4 border-t">
         <button className="btn btn-ghost">Cancel</button>
         <button className="btn btn-primary" onClick={onSubmit}>
