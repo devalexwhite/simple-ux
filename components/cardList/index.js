@@ -32,7 +32,7 @@ const CardList = ({
           children
         ) : (
           <span className="w-full h-full flex justify-center items-center font-bold text-sm py-32">
-            Drop a card into this group.
+            Drop here to join this group
           </span>
         )}
       </div>

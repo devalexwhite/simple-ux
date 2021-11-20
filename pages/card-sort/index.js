@@ -4,11 +4,11 @@ import { CardList } from "../../components/cardList";
 import { DropZone } from "../../components/dropZone";
 import styles from "../../styles/CardSort.module.css";
 
-export default function () {
+const CardSort = () => {
   const cards = [
     {
       id: "1",
-      title: "Jeans and boots with the fur on them",
+      title: "Jeans",
     },
     {
       id: "2",
@@ -149,11 +149,13 @@ export default function () {
       <div className="w-full py-4 px-4">
         <div className="px-2 pb-4">
           <progress
-            class="progress progress-primary mb-4"
+            className="progress progress-primary mb-4"
             value={cardsInList().length}
             max={cards.length}
           ></progress>
-          <span className="block font-medium">Drag the cards below</span>
+          <span className="block font-medium">
+            Click and drag the cards below
+          </span>
         </div>
 
         <div className="flex flex-row overflow-y-auto overflow-y-hidden w-full">
@@ -169,7 +171,7 @@ export default function () {
         className="z-0 flex-1 w-full  border-2 font-bold bg-base-300 text-center"
         ondrop={onZoneCardDrop}
       >
-        <div className="text-xl py-8">Drop a card here to form a group</div>
+        <div className="text-xl py-8">Drop here to form a new group</div>
         <div className="flex flex-row overflow-y-auto">
           {lists.map((i) => (
             <div key={i.id}>
@@ -194,9 +196,11 @@ export default function () {
       <div className="flex justify-between w-full px-8 py-4 border-t">
         <button className="btn btn-ghost">Cancel</button>
         <button className="btn btn-primary" onClick={onSubmit}>
-          I'm finished!
+          {"I'm finished!"}
         </button>
       </div>
     </div>
   );
-}
+};
+
+export default CardSort;
