@@ -8,7 +8,7 @@ export default function () {
   const cards = [
     {
       id: "1",
-      title: "Jeans",
+      title: "Jeans and boots with the fur on them",
     },
     {
       id: "2",

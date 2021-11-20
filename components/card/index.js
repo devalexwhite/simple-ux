@@ -9,7 +9,7 @@ const Card = ({ id, title }) => {
   return (
     <div
       id={id}
-      className="bg-base-200 border rounded inline-block py-6 px-16 text-sm shadow m-2"
+      className={`font-normal bg-base-200 border rounded inline-block py-6 px-4 flex justify-center items-center text-center text-sm shadow m-2 ${styles.card}`}
       draggable={true}
       onDragStart={ondragstart}
     >
