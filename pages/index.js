@@ -53,7 +53,7 @@ export default function Home() {
         </ul>
         <h2>{"Questions or feedback?"}</h2>
         <p>
-          {"We're very open to any feedback or questions."}
+          {"We're very open to any feedback or questions. "}
           <a href="mailto:alex.white@hey.com">Click here</a>
           {
             " to send us an email and we'll get back to you within a couple of days."
