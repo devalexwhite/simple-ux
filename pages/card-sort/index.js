@@ -37,7 +37,7 @@ export default function () {
   const [lists, setLists] = useState([
     {
       id: "0",
-      title: "Example Group",
+      title: "Men's Clothing",
       locked: true,
       cards: [],
     },
