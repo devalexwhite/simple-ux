@@ -4,6 +4,14 @@ import Image from "next/image";
 export default function Home() {
   return (
     <div className="prose container mx-auto my-16 px-4">
+      <Head>
+        <title>SimpleUX - Simple, bloat-free UX tools</title>
+        <meta
+          name="description"
+          content="SimpleUX empowers UX professionals through a suite of bullshit-free tools and educational resources that are available at whatever price point you can afford."
+        />
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
       <header>
         <h1>{"Simple, bloat-free UX tools"}</h1>
         <span>
