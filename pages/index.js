@@ -30,6 +30,16 @@ export default function Home() {
         <ul>
           <li>
             <a
+              href="https://github.com/sponsors/devalexwhite"
+              target="_blank"
+              rel="noreferrer"
+              className="link"
+            >
+              {"Sponsor SimpleUX"}
+            </a>
+          </li>
+          <li>
+            <a
               href="https://world.hey.com/alex.white/something-exciting-is-coming-062a1588"
               target="_blank"
               rel="noreferrer"
