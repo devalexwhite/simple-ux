@@ -1,21 +1,4 @@
-.cardList {
-  display: inline-flex;
-  flex-direction: column;
-  padding: 0rem 0.5rem 2rem 0.5rem;
-  border: 2px solid rgb(185, 185, 185);
-  margin: 0.5rem 1rem;
-  text-align: center;
-  pointer-events: ;
-}
-
-.header {
-  width: full;
-  padding: 0.25rem;
-  margin-bottom: 3rem;
-}
-
-.titleInput {
-  border-width: 0 0 2px 0;
-  font-size: 1.25rem;
-  text-align: center;
+.container {
+  min-width: 300px;
+  min-height: 150px;
 }

@@ -134,15 +134,33 @@ export default function () {
   };
 
   return (
-    <div>
-      <div className={styles.cardContainer}>
-        {cards
-          .filter((i) => !cardsInList().includes(i.id))
-          .map((i) => (
-            <Card title={i.title} id={i.id} key={i.id} />
-          ))}
+    <div className="flex flex-col min-h-screen">
+      <div className="w-full py-4 px-4">
+        <div className="px-2 pb-4">
+          <progress
+            class="progress progress-primary mb-4"
+            value={cardsInList().length}
+            max={cards.length}
+          ></progress>
+          <span className="block font-medium">Drag the cards below</span>
+        </div>
+
+        <div className="flex flex-row overflow-y-auto overflow-y-hidden w-full">
+          {cards
+            .filter((i) => !cardsInList().includes(i.id))
+            .map((i) => (
+              <Card title={i.title} id={i.id} key={i.id} />
+            ))}
+        </div>
       </div>
-      <div>
+      <DropZone
+        id={"0"}
+        className="w-full py-16 border-2 font-bold bg-base-300 text-center"
+        ondrop={onZoneCardDrop}
+      >
+        Drop a card here to form a group
+      </DropZone>
+      <div className="flex-1 flex flex-row overflow-y-auto">
         {lists.map((i) => (
           <div key={i.id}>
             <CardList
@@ -161,17 +179,12 @@ export default function () {
             </CardList>
           </div>
         ))}
-        <DropZone
-          id={"0"}
-          className={styles.newListDropzone}
-          ondrop={onZoneCardDrop}
-        >
-          Create new group
-        </DropZone>
       </div>
-      <div>
-        <button>Cancel</button>
-        <button onClick={onSubmit}>I'm finished!</button>
+      <div className="flex justify-between w-full px-8 py-4 border-t">
+        <button className="btn btn-ghost">Cancel</button>
+        <button className="btn btn-primary" onClick={onSubmit}>
+          I'm finished!
+        </button>
       </div>
     </div>
   );
