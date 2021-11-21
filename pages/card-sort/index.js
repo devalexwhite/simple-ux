@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Card } from "../../components/card";
 import { CardList } from "../../components/cardList";
 import { DropZone } from "../../components/dropZone";
+import { Modal } from "../../components/modal";
 import styles from "../../styles/CardSort.module.css";
 
 const CardSort = () => {
@@ -148,13 +149,9 @@ const CardSort = () => {
     <div className="flex flex-col min-h-screen h-screen">
       <div className="w-full py-4 px-4">
         <div className="px-2 pb-4">
-          <progress
-            className="progress progress-primary mb-4"
-            value={cardsInList().length}
-            max={cards.length}
-          ></progress>
           <span className="block font-medium">
-            Click and drag the cards below
+            Click and drag the cards below (
+            {cards.length - cardsInList().length} remaining)
           </span>
         </div>
 
