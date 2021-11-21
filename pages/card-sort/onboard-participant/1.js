@@ -1,4 +1,4 @@
-import { CardSortOnboardTemplate } from "../../../templates/cardSortOnboard";
+import { DefaultTemplate } from "../../../templates/defaultTemplate";
 import Link from "next/link";
 
 const OnboardParticipant1 = () => {
@@ -9,7 +9,7 @@ const OnboardParticipant1 = () => {
   wrong answer, simply do what makes the most sense.`;
 
   return (
-    <CardSortOnboardTemplate>
+    <DefaultTemplate>
       <ul className="steps w-full mb-16">
         <li className="step step-primary">Introduction</li>
         <li className="step">Instructions</li>
@@ -25,7 +25,7 @@ const OnboardParticipant1 = () => {
           <a className="btn btn-lg btn-primary">Next</a>
         </Link>
       </div>
-    </CardSortOnboardTemplate>
+    </DefaultTemplate>
   );
 };
 

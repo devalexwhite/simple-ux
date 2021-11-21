@@ -1,9 +1,9 @@
-import { CardSortOnboardTemplate } from "../../../templates/cardSortOnboard";
+import { DefaultTemplate } from "../../../templates/defaultTemplate";
 import Link from "next/link";
 
 const OnboardParticipant2 = () => {
   return (
-    <CardSortOnboardTemplate>
+    <DefaultTemplate>
       <ul className="steps w-full mb-16">
         <li className="step step-primary">Introduction</li>
         <li className="step step-primary">Instructions</li>
@@ -38,7 +38,7 @@ const OnboardParticipant2 = () => {
           <a className="btn btn-lg btn-primary">Get Started!</a>
         </Link>
       </div>
-    </CardSortOnboardTemplate>
+    </DefaultTemplate>
   );
 };
 

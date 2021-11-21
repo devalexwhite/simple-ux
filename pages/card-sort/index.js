@@ -35,6 +35,8 @@ const CardSort = () => {
 
   const [listCount, setListCount] = useState(1);
 
+  const [submitDialogOpen, setSubmitDialogOpen] = useState(false);
+
   const [lists, setLists] = useState([
     {
       id: "0",
@@ -47,9 +49,16 @@ const CardSort = () => {
   const onSubmit = () => {
     const inGroups = cardsInList();
     const hasRCards = inGroups.length < cards.length;
-    if (hasRCards) {
-      if (!confirm("There are still cards not in a group, continue?")) return;
-    }
+
+    if (hasRCards > 0) setSubmitDialogOpen(true);
+    else processSubmit();
+  };
+
+  const processSubmit = () => {
+    setSubmitDialogOpen(false);
+
+    const inGroups = cardsInList();
+    const hasRCards = inGroups.length < cards.length;
 
     const findCard = (id) => cards.find((i) => i.id === id);
 
@@ -68,8 +77,6 @@ const CardSort = () => {
         cards: cards.filter((i) => !inGroups.includes(i.id)),
       });
     }
-
-    console.log(submitObject);
   };
 
   const cardsInList = () => lists.reduce((p, c) => [...p, ...c.cards], []);
@@ -147,6 +154,21 @@ const CardSort = () => {
 
   return (
     <div className="flex flex-col min-h-screen h-screen">
+      <Modal
+        onCancel={() => setSubmitDialogOpen(false)}
+        onConfirm={processSubmit}
+        open={submitDialogOpen}
+      >
+        <div className="prose">
+          <p>
+            {`There are ${
+              cards.length - cardsInList().length
+            } cards not in groups.
+          Sometimes cards simply don't fit into groups!`}
+          </p>
+          <p>{`Would you like to submit your response?`}</p>
+        </div>
+      </Modal>
       <div className="w-full py-4 px-4">
         <div className="px-2 pb-4">
           <span className="block font-medium">
@@ -190,9 +212,8 @@ const CardSort = () => {
           ))}
         </div>
       </DropZone>
-      <div className="flex justify-between w-full px-8 py-4 border-t">
-        <button className="btn btn-ghost">Cancel</button>
-        <button className="btn btn-primary" onClick={onSubmit}>
+      <div className="flex justify-center w-full px-8 py-4 border-t">
+        <button className="btn btn-primary btn-lg" onClick={onSubmit}>
           {"I'm finished!"}
         </button>
       </div>
