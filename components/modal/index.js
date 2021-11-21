@@ -4,7 +4,7 @@ const Modal = ({ open, onConfirm, onCancel, children }) => {
       <div className="modal-box">
         {children}
         <div className="modal-action">
-          <button class="btn" onClick={onCancel}>
+          <button className="btn" onClick={onCancel}>
             Cancel
           </button>
           <button className="btn btn-primary" onClick={onConfirm}>

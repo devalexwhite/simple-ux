@@ -10,9 +10,9 @@ const OnboardParticipant1 = () => {
 
   return (
     <CardSortOnboardTemplate>
-      <ul class="steps w-full mb-16">
-        <li class="step step-primary">Introduction</li>
-        <li class="step">Instructions</li>
+      <ul className="steps w-full mb-16">
+        <li className="step step-primary">Introduction</li>
+        <li className="step">Instructions</li>
       </ul>
 
       <article className="prose mx-auto mb-16">
