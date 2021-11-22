@@ -19,7 +19,7 @@ const CardList = ({
       <input
         className={`input-secondary input ${
           locked ? "input-ghost" : "input-bordered"
-        } w-full text-center text-lg`}
+        } w-full text-center w-full`}
         type="text"
         placeholder="Click to set a title"
         onChange={(e) => onChangeTitle(id, e.target.value)}
@@ -31,7 +31,7 @@ const CardList = ({
         {children.length ? (
           children
         ) : (
-          <span className="w-full h-full flex justify-center items-center font-bold text-sm py-32">
+          <span className="w-full h-full flex justify-center items-center font-bold text-sm py-8">
             Drop here to join this group
           </span>
         )}

@@ -53,7 +53,7 @@ export default function Home() {
         <h2>{"Sponsor SimpleUX"}</h2>
         <p>
           {
-            "SimpleUX is built 100% in the open and supported entirely by our sponsors. Sponsoring SimleUX helps us pay infrastructure costs and continue to develop the tools SimpleUX offers"
+            "SimpleUX is built 100% in the open and supported entirely by our sponsors. Sponsoring SimleUX helps us pay infrastructure costs and continue to develop the tools SimpleUX offers."
           }
         </p>
         <iframe

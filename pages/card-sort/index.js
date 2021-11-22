@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { Card } from "../../components/card";
 import { CardList } from "../../components/cardList";
@@ -9,41 +10,58 @@ const CardSort = () => {
   const cards = [
     {
       id: "1",
-      title: "Jeans",
+      title: "View results",
     },
     {
       id: "2",
-      title: "Dresses",
+      title: "Message participants",
     },
     {
       id: "3",
-      title: "Socks",
+      title: "Create a new study",
     },
     {
       id: "4",
-      title: "Shoes",
+      title: "View feedback surveys",
     },
     {
       id: "5",
-      title: "Jackets",
+      title: "Log out of user account",
     },
     {
       id: "6",
-      title: "Swimwear",
+      title: "Edit profile name",
+    },
+    {
+      id: "7",
+      title: "Change email address",
+    },
+    {
+      id: "8",
+      title: "Data analytics dashboard",
+    },
+    {
+      id: "9",
+      title: "Contact support",
+    },
+    {
+      id: "10",
+      title: "Review notifications",
     },
   ];
 
   const [listCount, setListCount] = useState(1);
+  const router = useRouter();
 
   const [submitDialogOpen, setSubmitDialogOpen] = useState(false);
 
   const [lists, setLists] = useState([
-    {
-      id: "0",
-      title: "Men's Clothing",
-      locked: true,
-      cards: [],
-    },
+    // {
+    //   id: "0",
+    //   title: "Men's Clothing",
+    //   locked: true,
+    //   cards: [],
+    // },
   ]);
 
   const onSubmit = () => {
@@ -54,7 +72,7 @@ const CardSort = () => {
     else processSubmit();
   };
 
-  const processSubmit = () => {
+  const processSubmit = async () => {
     setSubmitDialogOpen(false);
 
     const inGroups = cardsInList();
@@ -76,6 +94,22 @@ const CardSort = () => {
         isUserGroup: false,
         cards: cards.filter((i) => !inGroups.includes(i.id)),
       });
+    }
+
+    try {
+      const result = await fetch("/api/card-sort/submit", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          cards: submitObject,
+        }),
+      });
+      router.push("/card-sort/congrats");
+    } catch (e) {
+      alert(`An error occurred: ${e.message}`);
     }
   };
 
@@ -172,8 +206,10 @@ const CardSort = () => {
       <div className="w-full py-4 px-4">
         <div className="px-2 pb-4">
           <span className="block font-medium">
-            Click and drag the cards below (
-            {cards.length - cardsInList().length} remaining)
+            Click and drag the cards below
+          </span>
+          <span className="font-bold text-sm text-secondary">
+            {cards.length - cardsInList().length} cards remaining
           </span>
         </div>
 

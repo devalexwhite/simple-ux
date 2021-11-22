@@ -16,6 +16,9 @@ const OnboardParticipant1 = () => {
       </ul>
 
       <article className="prose mx-auto mb-16">
+        <span className="text-sm font-medium pb-4 block uppercase tracking-wide">
+          Research study created by Alex White
+        </span>
         <h1>{introTitle}</h1>
         <p>{introParagraph}</p>
       </article>
