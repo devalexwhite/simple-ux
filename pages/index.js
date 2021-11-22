@@ -31,26 +31,6 @@ export default function Home() {
         <ul>
           <li>
             <a
-              href="https://github.com/sponsors/devalexwhite"
-              target="_blank"
-              rel="noreferrer"
-              className="link"
-            >
-              {"Sponsor SimpleUX"}
-            </a>
-          </li>
-          <li>
-            <a
-              href="https://world.hey.com/alex.white/something-exciting-is-coming-062a1588"
-              target="_blank"
-              rel="noreferrer"
-              className="link"
-            >
-              {"SimpleUX announcement letter"}
-            </a>
-          </li>
-          <li>
-            <a
               href="https://world.hey.com/alex.white"
               target="_blank"
               rel="noreferrer"
@@ -70,6 +50,19 @@ export default function Home() {
             </a>
           </li>
         </ul>
+        <h2>{"Sponsor SimpleUX"}</h2>
+        <p>
+          {
+            "SimpleUX is built 100% in the open and supported entirely by our sponsors. Sponsoring SimleUX helps us pay infrastructure costs and continue to develop the tools SimpleUX offers"
+          }
+        </p>
+        <iframe
+          src="https://github.com/sponsors/devalexwhite/card"
+          title="Sponsor devalexwhite"
+          height="170"
+          width="600"
+          className="border-0"
+        ></iframe>
         <h2>{"Questions or feedback?"}</h2>
         <p>
           {"We're very open to any feedback or questions. "}
