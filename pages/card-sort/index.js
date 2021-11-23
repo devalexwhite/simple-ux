@@ -7,7 +7,7 @@ import { Modal } from "../../components/modal";
 import styles from "../../styles/CardSort.module.css";
 
 const CardSort = () => {
-  const cards = [
+  const [cards, setCards] = useState([
     {
       id: "1",
       title: "View results",
@@ -48,7 +48,7 @@ const CardSort = () => {
       id: "10",
       title: "Review notifications",
     },
-  ];
+  ]);
 
   const [listCount, setListCount] = useState(1);
   const router = useRouter();
@@ -63,6 +63,18 @@ const CardSort = () => {
     //   cards: [],
     // },
   ]);
+
+  const moveStackRight = () => {
+    const cloneCards = [...cards];
+    cloneCards.push(cloneCards.shift());
+    setCards(cloneCards);
+  };
+
+  const moveStackLeft = () => {
+    const cloneCards = [...cards];
+    cloneCards.unshift(cloneCards.pop());
+    setCards(cloneCards);
+  };
 
   const onSubmit = () => {
     const inGroups = cardsInList();
@@ -188,6 +200,10 @@ const CardSort = () => {
 
   return (
     <div className="flex flex-col min-h-screen h-screen">
+      <div className="navbar flex justify-end w-full flex-row">
+        <button className="btn btn-ghost mx-2">What do I do?</button>
+        <button className="btn btn-primary mx-2">I'm Finished</button>
+      </div>
       <Modal
         onCancel={() => setSubmitDialogOpen(false)}
         onConfirm={processSubmit}
@@ -203,33 +219,23 @@ const CardSort = () => {
           <p>{`Would you like to submit your response?`}</p>
         </div>
       </Modal>
-      <div className="w-full py-4 px-4">
-        <div className="px-2 pb-4">
-          <span className="block font-medium">
-            Click and drag the cards below
-          </span>
-          <span className="font-bold text-sm text-secondary">
-            {cards.length - cardsInList().length} cards remaining
-          </span>
-        </div>
-
-        <div className="flex flex-row overflow-y-auto overflow-y-hidden w-full">
-          {cards
-            .filter((i) => !cardsInList().includes(i.id))
-            .map((i) => (
-              <Card title={i.title} id={i.id} key={i.id} />
-            ))}
-        </div>
-      </div>
       <DropZone
         id="card-dropzone"
-        className="z-0 flex-1 w-full  border-2 font-bold bg-base-300 text-center"
+        className="min-w-full max-h-full flex-1 overflow-auto bg-base-300 py-4 px-8"
         ondrop={onZoneCardDrop}
       >
-        <div className="text-xl py-8">Drop here to form a new group</div>
-        <div className="flex flex-row overflow-y-auto">
+        {cardsInList().length === 0 && (
+          <div className="flex flex-col justify-center items-center">
+            <img src="/design-thinking.svg" width="120" />
+
+            <div className="text-xm font-light pt-2">
+              Drag a card from below to form a group
+            </div>
+          </div>
+        )}
+        <div className="flex flex-row">
           {lists.map((i) => (
-            <div key={i.id}>
+            <div key={i.id} className="mx-4">
               <CardList
                 id={i.id}
                 title={i.title}
@@ -241,18 +247,72 @@ const CardSort = () => {
                 {cards
                   .filter((c) => i.cards.includes(c.id))
                   .map((c) => (
-                    <Card title={c.title} id={c.id} key={c.key} />
+                    <div className="m-2">
+                      <Card title={c.title} id={c.id} key={c.key} />
+                    </div>
                   ))}
               </CardList>
             </div>
           ))}
         </div>
       </DropZone>
-      <div className="flex justify-center w-full px-8 py-4 border-t">
+      <div className="flex flex-col justify-center w-full py-10 items-center bg-200">
+        <div className="mb-4 font-bold text-secondary">
+          {cards.length - cardsInList().length} cards in stack
+        </div>
+        <div className="flex justify-center items-center">
+          <button
+            className="btn btn-ghost btn-xl pb-16 text-primary"
+            onClick={moveStackLeft}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="68"
+              height="68"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="feather feather-chevron-left"
+            >
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+          <div className="stack mx-6">
+            {cards
+              .filter((i) => !cardsInList().includes(i.id))
+              .map((i) => (
+                <Card title={i.title} id={i.id} key={i.id} />
+              ))}
+          </div>
+          <button
+            className="btn btn-ghost btn-xl pb-16 text-primary"
+            onClick={moveStackRight}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="68"
+              height="68"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="feather feather-chevron-left"
+            >
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+        </div>
+      </div>
+      {/* <div className="flex justify-center w-full px-8 py-4 border-t">
         <button className="btn btn-primary btn-lg" onClick={onSubmit}>
           {"I'm finished!"}
         </button>
-      </div>
+      </div> */}
     </div>
   );
 };

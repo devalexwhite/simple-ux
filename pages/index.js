@@ -4,7 +4,7 @@ import { Modal } from "../components/modal";
 
 export default function Home() {
   return (
-    <div className="prose container mx-auto my-16 px-4">
+    <div className="prose container mx-auto my-16 px-4 text-base-content">
       <Head>
         <title>SimpleUX - Simple, bloat-free UX tools</title>
         <link rel="icon" type="image/png" href="/favicon.png" />

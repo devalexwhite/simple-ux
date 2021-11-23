@@ -12,11 +12,16 @@ const CardList = ({
 }) => {
   return (
     <DropZone
-      className={`z-10 border-2 flex flex-col bg-base-100 px-4 py-4 m-4 items-center ${styles.container}`}
+      className={`
+        flex flex-col
+      `}
       ondrop={onDrop}
       id={id}
     >
-      <input
+      <button className=" pb-1 text-left text-xl font-black">
+        {title ? title : "Group title"}
+      </button>
+      {/* <input
         className={`input-secondary input ${
           locked ? "input-ghost" : "input-bordered"
         } w-full text-center w-full`}
@@ -26,8 +31,10 @@ const CardList = ({
         value={title}
         autoFocus
         disabled={locked}
-      />
-      <div className={`flex-1 flex flex-col w-full  text-center py-8`}>
+      /> */}
+      <div
+        className={`w-full overflow-x-auto overflow-y-hidden flex flex-row flex-wrap p-6 border-2 border-dashed rounded-lg border-black max-w-3xl block font-normal ${styles.container}`}
+      >
         {children.length ? (
           children
         ) : (
@@ -36,14 +43,14 @@ const CardList = ({
           </span>
         )}
       </div>
-      {!locked && (
+      {/* {!locked && (
         <button
           className="btn btn-sm btn-warning w-full"
           onClick={() => onDelete(id)}
         >
           Delete group
         </button>
-      )}
+      )} */}
     </DropZone>
   );
 };
