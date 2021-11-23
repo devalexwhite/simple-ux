@@ -3,6 +3,7 @@ import { ReactSVG } from "react-svg";
 import { FeaturesRow } from "../components/featuresRow";
 import { Footer } from "../components/footer";
 import { SubscribedModal } from "../components/modals/subscribedModal";
+import Head from "next/head";
 
 const Home = () => {
   const [email, setEmail] = useState("");
@@ -65,6 +66,15 @@ const Home = () => {
 
   return (
     <div className="bg-white pb-8 sm:pb-12 lg:pb-12">
+      <Head>
+        <title>SimpleUX - Simple, bloat-free UX tools</title>
+        <link ref="icon" type="image/png" href="/favicon.png" />
+        <meta
+          name="description"
+          content="SimpleUX empowers UX professionals through a suite of bullshit-free tools and educational resources that are available at whatever price point you can afford."
+        />
+      </Head>
+
       <SubscribedModal open={emailModalOpen} setOpen={setEmailModalOpen} />
       <div className="pt-8 overflow-hidden sm:pt-12 lg:relative lg:py-48">
         <div className="mx-auto max-w-md px-4 sm:max-w-3xl sm:px-6 lg:px-8 lg:max-w-7xl lg:grid lg:grid-cols-2 lg:gap-24">
