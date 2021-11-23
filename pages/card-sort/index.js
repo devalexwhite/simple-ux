@@ -3,8 +3,7 @@ import { useState } from "react";
 import { Card } from "../../components/card";
 import { CardList } from "../../components/cardList";
 import { DropZone } from "../../components/dropZone";
-import { Modal } from "../../components/modal";
-import styles from "../../styles/CardSort.module.css";
+import { SubmitCardSortModal } from "../../components/modals/submitCardSortModal";
 
 const CardSort = () => {
   const cards = [
@@ -73,8 +72,6 @@ const CardSort = () => {
   };
 
   const processSubmit = async () => {
-    setSubmitDialogOpen(false);
-
     const inGroups = cardsInList();
     const hasRCards = inGroups.length < cards.length;
 
@@ -97,7 +94,7 @@ const CardSort = () => {
     }
 
     try {
-      const result = await fetch("/api/card-sort/submit", {
+      await fetch("/api/card-sort/submit", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -188,21 +185,12 @@ const CardSort = () => {
 
   return (
     <div className="flex flex-col min-h-screen h-screen">
-      <Modal
-        onCancel={() => setSubmitDialogOpen(false)}
-        onConfirm={processSubmit}
+      <SubmitCardSortModal
         open={submitDialogOpen}
-      >
-        <div className="prose">
-          <p>
-            {`There are ${
-              cards.length - cardsInList().length
-            } cards not in groups.
-          Sometimes cards simply don't fit into groups!`}
-          </p>
-          <p>{`Would you like to submit your response?`}</p>
-        </div>
-      </Modal>
+        setOpen={setSubmitDialogOpen}
+        submitHandler={processSubmit}
+        cardsRemaining={cards.length - cardsInList().length}
+      />
       <div className="w-full py-4 px-4">
         <div className="px-2 pb-4">
           <span className="block font-medium">

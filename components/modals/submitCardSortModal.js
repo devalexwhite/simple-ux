@@ -1,14 +1,21 @@
-/* This example requires Tailwind CSS v2.0+ */
-import { Fragment, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/outline";
 
-const SubscribedDialog = ({ open, setOpen }) => {
+const SubmitCardSortModal = ({
+  open,
+  setOpen,
+  submitHandler,
+  cardsRemaining,
+}) => {
+  const cancelButtonRef = useRef(null);
+
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog
         as="div"
         className="fixed z-10 inset-0 overflow-y-auto"
+        initialFocus={cancelButtonRef}
         onClose={setOpen}
       >
         <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
@@ -39,7 +46,7 @@ const SubscribedDialog = ({ open, setOpen }) => {
             leaveFrom="opacity-100 translate-y-0 sm:scale-100"
             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
-            <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6">
+            <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
               <div>
                 <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
                   <CheckIcon
@@ -52,23 +59,38 @@ const SubscribedDialog = ({ open, setOpen }) => {
                     as="h3"
                     className="text-lg leading-6 font-medium text-gray-900"
                   >
-                    {`Got it!`}
+                    All done?
                   </Dialog.Title>
                   <div className="mt-2">
+                    {cardsRemaining > 0 && (
+                      <p className="text-sm font-bold text-red-500">
+                        {`There are ${cardsRemaining} cards not yet in a group. You are still able to submit if you wish!`}
+                      </p>
+                    )}
                     <p className="text-sm text-gray-500">
-                      {`Thanks for subscribing, you rock! We'll be in touch once
-                      SimpleUX is ready for you to jump in.`}
+                      {`Clicking 'Submit' will send your responses to the researcher who created the study.`}
                     </p>
                   </div>
                 </div>
               </div>
-              <div className="mt-5 sm:mt-6">
+              <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
                 <button
                   type="button"
-                  className="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
-                  onClick={() => setOpen(false)}
+                  className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm"
+                  onClick={() => {
+                    setOpen(false);
+                    submitHandler();
+                  }}
                 >
-                  {`Close`}
+                  Submit
+                </button>
+                <button
+                  type="button"
+                  className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:col-start-1 sm:text-sm"
+                  onClick={() => setOpen(false)}
+                  ref={cancelButtonRef}
+                >
+                  Cancel
                 </button>
               </div>
             </div>
@@ -79,4 +101,4 @@ const SubscribedDialog = ({ open, setOpen }) => {
   );
 };
 
-export { SubscribedDialog };
+export { SubmitCardSortModal };
