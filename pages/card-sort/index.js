@@ -1,9 +1,11 @@
+import { CheckCircleIcon } from "@heroicons/react/outline";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { Card } from "../../components/card";
 import { CardList } from "../../components/cardList";
 import { DropZone } from "../../components/dropZone";
 import { SubmitCardSortModal } from "../../components/modals/submitCardSortModal";
+import { StudyLayout } from "../../templates/studyLayout";
 
 const CardSort = () => {
   const cards = [
@@ -54,14 +56,7 @@ const CardSort = () => {
 
   const [submitDialogOpen, setSubmitDialogOpen] = useState(false);
 
-  const [lists, setLists] = useState([
-    // {
-    //   id: "0",
-    //   title: "Men's Clothing",
-    //   locked: true,
-    //   cards: [],
-    // },
-  ]);
+  const [boardObjects, setBoardObjects] = useState([...cards]);
 
   const onSubmit = () => {
     const inGroups = cardsInList();
@@ -183,65 +178,59 @@ const CardSort = () => {
     if (list) list.cards.push(cardId);
   };
 
-  return (
-    <div className="flex flex-col min-h-screen h-screen">
-      <SubmitCardSortModal
-        open={submitDialogOpen}
-        setOpen={setSubmitDialogOpen}
-        submitHandler={processSubmit}
-        cardsRemaining={cards.length - cardsInList().length}
-      />
-      <div className="w-full py-4 px-4">
-        <div className="px-2 pb-4">
-          <span className="block font-medium">
-            Click and drag the cards below
-          </span>
-          <span className="font-bold text-sm text-secondary">
-            {cards.length - cardsInList().length} cards remaining
-          </span>
-        </div>
+  const onCardDrop = (target, destination) => {
+    const newBoardObjects = [...boardObjects];
+    const destinationIndex = newBoardObjects.findIndex(
+      (i) => i.id === destination
+    );
 
-        <div className="flex flex-row overflow-y-auto overflow-y-hidden w-full">
-          {cards
-            .filter((i) => !cardsInList().includes(i.id))
-            .map((i) => (
-              <Card title={i.title} id={i.id} key={i.id} />
-            ))}
-        </div>
-      </div>
-      <DropZone
-        id="card-dropzone"
-        className="z-0 flex-1 w-full  border-2 font-bold bg-base-300 text-center"
-        ondrop={onZoneCardDrop}
-      >
-        <div className="text-xl py-8">Drop here to form a new group</div>
-        <div className="flex flex-row overflow-y-auto">
-          {lists.map((i) => (
-            <div key={i.id}>
-              <CardList
-                id={i.id}
-                title={i.title}
-                onDrop={(ev) => onListCardDrop(i.id, ev)}
-                onDelete={onListDelete}
-                onChangeTitle={onChangeListTitle}
-                locked={i.locked}
-              >
-                {cards
-                  .filter((c) => i.cards.includes(c.id))
-                  .map((c) => (
-                    <Card title={c.title} id={c.id} key={c.key} />
-                  ))}
+    const targetCard = boardObjects.find((i) => i.id === target);
+    const destinationCard = boardObjects.find((i) => i.id === destination);
+
+    newBoardObjects.splice(destinationIndex, 1, {
+      id: destinationIndex,
+      title: "Name this group",
+      children: [targetCard, destinationCard],
+    });
+
+    setBoardObjects(newBoardObjects);
+  };
+
+  const onListDrop = (target, destination) => {
+    const targetCard = boardObjects.find((i) => i.id === target);
+    const destinationList = boardObjects.find((i) => i.id === destination);
+
+    destinationList.children.push(targetCard);
+  };
+
+  return (
+    <StudyLayout>
+      <div className="grid grid-cols-5 gap-6 h-full">
+        {boardObjects.map((obj) => (
+          <>
+            {obj.children && (
+              <CardList title={obj.title} key={obj.id} onListDrop={onListDrop}>
+                {obj.children.map((card) => (
+                  <Card key={card.id} title={card.title}></Card>
+                ))}
               </CardList>
-            </div>
-          ))}
-        </div>
-      </DropZone>
-      <div className="flex justify-center w-full px-8 py-4 border-t">
-        <button className="btn btn-primary btn-lg" onClick={onSubmit}>
-          {"I'm finished!"}
+            )}
+            {!obj.children && (
+              <Card key={obj.id} {...obj} onCardDrop={onCardDrop} />
+            )}
+          </>
+        ))}
+      </div>
+      <div className="flex items-center justify-center py-4 fixed bottom-0 w-full left-0 bg-white border-t border-gray-300">
+        <button
+          type="button"
+          className="inline-flex items-center px-8 py-5 border border-transparent text-lg font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        >
+          <CheckCircleIcon width={26} className="mr-2" />
+          I'm Done!
         </button>
       </div>
-    </div>
+    </StudyLayout>
   );
 };
 
