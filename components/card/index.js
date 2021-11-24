@@ -1,12 +1,12 @@
 import { useState } from "react";
 import styles from "./card.module.css";
 
-const Card = ({ id, title, onCardDrop }) => {
+const Card = ({ id, title, onCardDrop, isInList }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [isDragTarget, setIsDragTarget] = useState(false);
 
   const onDragStart = (ev) => {
-    ev.dataTransfer.setData("text/plain", ev.target.id);
+    ev.dataTransfer.setData("text/plain", id);
     ev.dataTransfer.dropEffect = "move";
   };
 
@@ -43,10 +43,10 @@ const Card = ({ id, title, onCardDrop }) => {
       onDragStart={onDragStart}
       onDrag={() => setIsDragging(true)}
       onDragEnd={() => setIsDragging(false)}
-      onDragEnter={onDragEnter}
-      onDragLeave={() => setIsDragTarget(false)}
-      onDragOver={onDragOver}
-      onDrop={onDrop}
+      onDragEnter={(ev) => (isInList ? () => {} : onDragEnter(ev))}
+      onDragLeave={() => (isInList ? () => {} : setIsDragTarget(false))}
+      onDragOver={(ev) => (isInList ? () => {} : onDragOver(ev))}
+      onDrop={(ev) => (isInList ? () => {} : onDrop(ev))}
     >
       {!isDragging && title}
     </div>
