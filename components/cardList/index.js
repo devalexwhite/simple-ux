@@ -1,3 +1,4 @@
+import { PencilIcon } from "@heroicons/react/outline";
 import { DropZone } from "../dropZone";
 import styles from "./cardList.module.css";
 
@@ -5,46 +6,32 @@ const CardList = ({
   id,
   title,
   children,
-  onDrop,
+  onListDrop,
   onDelete,
   onChangeTitle,
   locked = false,
 }) => {
+  const onDrop = (ev) => {
+    ev.preventDefault();
+    const data = ev.dataTransfer.getData("text/plain");
+    onListDrop(data, id);
+  };
+
+  const onDragOver = (ev) => {
+    ev.preventDefault();
+    ev.dataTransfer.dropEffect = "move";
+  };
+
   return (
-    <DropZone
-      className={`z-10 border-2 flex flex-col bg-base-100 px-4 py-4 m-4 items-center ${styles.container}`}
-      ondrop={onDrop}
-      id={id}
-    >
-      <input
-        className={`input-secondary input ${
-          locked ? "input-ghost" : "input-bordered"
-        } w-full text-center w-full`}
-        type="text"
-        placeholder="Click to set a title"
-        onChange={(e) => onChangeTitle(id, e.target.value)}
-        value={title}
-        autoFocus
-        disabled={locked}
-      />
-      <div className={`flex-1 flex flex-col w-full  text-center py-8`}>
-        {children.length ? (
-          children
-        ) : (
-          <span className="w-full h-full flex justify-center items-center font-bold text-sm py-8">
-            Drop here to join this group
-          </span>
-        )}
+    <div className="flex flex-col" onDrop={onDrop} onDragOver={onDragOver}>
+      <div className="text-base text-blue-700 mb-2 font-medium flex items-center">
+        <PencilIcon width={16} className="mr-2" />
+        {title}
       </div>
-      {!locked && (
-        <button
-          className="btn btn-sm btn-warning w-full"
-          onClick={() => onDelete(id)}
-        >
-          Delete group
-        </button>
-      )}
-    </DropZone>
+      {children.map((child) => (
+        <div className="mb-2">{child}</div>
+      ))}
+    </div>
   );
 };
 
