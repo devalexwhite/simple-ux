@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Card } from "../../components/card";
 import { CardList } from "../../components/cardList";
 import { DropZone } from "../../components/dropZone";
+import { CardSortSetListTitleModal } from "../../components/modals/cardSortSetListTitleModal";
 import { SubmitCardSortModal } from "../../components/modals/submitCardSortModal";
 import { StudyLayout } from "../../templates/studyLayout";
 
@@ -55,8 +56,14 @@ const CardSort = () => {
   const router = useRouter();
 
   const [submitDialogOpen, setSubmitDialogOpen] = useState(false);
+  const [titleDialogOpen, setTitleDialogOpen] = useState(false);
 
-  const [boardObjects, setBoardObjects] = useState([...cards]);
+  const [boardObjects, setBoardObjects] = useState(
+    cards.map((card) => ({
+      ...card,
+      type: "card",
+    }))
+  );
 
   const onSubmit = () => {
     const inGroups = cardsInList();
@@ -180,23 +187,21 @@ const CardSort = () => {
 
   const onCardDrop = (target, destination) => {
     const newBoardObjects = [...boardObjects];
-    const targetIndex = newBoardObjects.findIndex((i) => i.id === target);
-    const destinationIndex = newBoardObjects.findIndex(
+
+    const targetIndex = boardObjects.findIndex((i) => i.id === target);
+    const destinationIndex = boardObjects.findIndex(
       (i) => i.id === destination
     );
 
     const targetCard = boardObjects[targetIndex];
     const destinationCard = boardObjects[destinationIndex];
 
-    const listId = objectCount + 1;
+    targetCard.type = "inList";
+    targetCard.listId = objectCount + 1;
 
-    newBoardObjects.splice(destinationIndex, 1, {
-      id: objectCount + 1,
-      title: "Name this group",
-    });
-
-    destinationCard.listId = listId;
-    targetCard.listId = listId;
+    destinationCard.type = "list";
+    destinationCard.listId = objectCount + 1;
+    destinationCard.listTitle = "Name this group";
 
     setObjectCount(objectCount + 1);
 
@@ -206,41 +211,51 @@ const CardSort = () => {
   const onListDrop = (target, destination) => {
     const newBoardObjects = [...boardObjects];
 
-    const targetIndex = newBoardObjects.findIndex((i) => i.id === target);
+    const targetIndex = boardObjects.findIndex((i) => i.id === target);
 
     const targetCard = newBoardObjects[targetIndex];
-    const destinationList = newBoardObjects.find((i) => i.id === destination);
-
-    destinationList.children.push(targetCard);
-
-    newBoardObjects.splice(targetIndex, 1, {});
+    targetCard.type = "inList";
+    targetCard.listId = destination;
 
     setBoardObjects(newBoardObjects);
   };
 
+  const onEditTitle = (listId) => {
+    setTitleDialogOpen(true);
+  };
+
   return (
     <StudyLayout>
+      <CardSortSetListTitleModal
+        open={titleDialogOpen}
+        setOpen={setTitleDialogOpen}
+        onSubmit={() => {}}
+      />
       <div className="grid grid-cols-5 gap-6 h-full">
         {boardObjects.map((obj) => (
           <>
-            {obj.children && (
+            {obj.type === "list" && (
               <CardList
                 title={obj.title}
-                key={obj.id}
+                key={obj.listId}
                 onListDrop={onListDrop}
-                id={obj.id}
+                id={obj.listId}
+                onEditTitle={() => onEditTitle(obj.listId)}
               >
-                {obj.children.map((card) => (
-                  <Card
-                    key={card.id}
-                    title={card.title}
-                    id={card.id}
-                    isInList={true}
-                  ></Card>
-                ))}
+                {boardObjects
+                  .filter((i) => i?.listId === obj.listId)
+                  .map((card) => (
+                    <Card
+                      key={card.id}
+                      title={card.title}
+                      id={card.id}
+                      isInList={true}
+                    ></Card>
+                  ))}
               </CardList>
             )}
-            {!obj.children && obj.id && (
+
+            {obj.type === "card" && (
               <Card
                 key={obj.id}
                 {...obj}
@@ -248,7 +263,8 @@ const CardSort = () => {
                 isInList={false}
               />
             )}
-            {!obj.children && !obj.id && <div></div>}
+
+            {obj.type === "inList" && <div></div>}
           </>
         ))}
       </div>

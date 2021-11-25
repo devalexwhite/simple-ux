@@ -1,15 +1,7 @@
 import { PencilIcon } from "@heroicons/react/outline";
 import { useState } from "react";
 
-const CardList = ({
-  id,
-  title,
-  children,
-  onListDrop,
-  onDelete,
-  onChangeTitle,
-  locked = false,
-}) => {
+const CardList = ({ id, title, children, onListDrop, onEditTitle }) => {
   const [isDragTarget, setIsDragTarget] = useState(false);
 
   const onDrop = (ev) => {
@@ -37,10 +29,13 @@ const CardList = ({
         }`}
         onDragLeave={() => setIsDragTarget(false)}
       ></div>
-      <div className="text-base text-blue-700 mb-2 font-medium flex items-center">
+      <button
+        className="text-base text-blue-700 mb-2 font-medium flex items-center"
+        onClick={onEditTitle}
+      >
         <PencilIcon width={16} className="mr-2" />
         {title}
-      </div>
+      </button>
       <div className="relative">
         {children.map((child) => (
           <div className={`mb-2 `}>{child}</div>
