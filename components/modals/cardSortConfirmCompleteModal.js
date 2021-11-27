@@ -1,13 +1,9 @@
-import { Fragment, useRef } from "react";
+/* This example requires Tailwind CSS v2.0+ */
+import { Fragment, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { CheckIcon } from "@heroicons/react/outline";
+import { ReactSVG } from "react-svg";
 
-const SubmitCardSortModal = ({
-  open,
-  setOpen,
-  submitHandler,
-  cardsRemaining,
-}) => {
+const CardSortConfirmCompleteModal = ({ open, setOpen, onConfirm }) => {
   const cancelButtonRef = useRef(null);
 
   return (
@@ -31,6 +27,7 @@ const SubmitCardSortModal = ({
             <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
           </Transition.Child>
 
+          {/* This element is to trick the browser into centering the modal contents. */}
           <span
             className="hidden sm:inline-block sm:align-middle sm:h-screen"
             aria-hidden="true"
@@ -46,29 +43,34 @@ const SubmitCardSortModal = ({
             leaveFrom="opacity-100 translate-y-0 sm:scale-100"
             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
-            <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+            <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-xl sm:w-full sm:p-6">
               <div>
-                <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
-                  <CheckIcon
-                    className="h-6 w-6 text-green-600"
-                    aria-hidden="true"
+                <div className="mx-auto mmax-w-2xl">
+                  <ReactSVG
+                    src="/illustrations/done.svg"
+                    className="flex w-full justify-center"
+                    beforeInjection={(svg) => {
+                      svg.setAttribute("style", "width: 400px;height: 200px;");
+                    }}
                   />
                 </div>
-                <div className="mt-3 text-center sm:mt-5">
+                <div className="mt-3 text-left sm:mt-5">
                   <Dialog.Title
                     as="h3"
-                    className="text-lg leading-6 font-medium text-gray-900"
+                    className="text-lg text-center leading-6 font-medium text-gray-900"
                   >
-                    All done?
+                    You rock!
                   </Dialog.Title>
                   <div className="mt-2">
-                    {cardsRemaining > 0 && (
-                      <p className="text-sm font-bold text-red-500">
-                        {`There are ${cardsRemaining} cards not yet in a group. You are still able to submit if you wish!`}
-                      </p>
-                    )}
-                    <p className="text-sm text-gray-500">
-                      {`Clicking 'Submit' will send your responses to the researcher who created the study.`}
+                    <p className="text-base text-gray-500">
+                      Thank you for participating in this study, your response
+                      makes a big difference!
+                    </p>
+                  </div>
+                  <div className="mt-2">
+                    <p className="text-base text-gray-500">
+                      After clicking "Submit", your results will be sent to the
+                      researcher that created the study.
                     </p>
                   </div>
                 </div>
@@ -79,7 +81,7 @@ const SubmitCardSortModal = ({
                   className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm"
                   onClick={() => {
                     setOpen(false);
-                    submitHandler();
+                    onConfirm();
                   }}
                 >
                   Submit
@@ -101,4 +103,4 @@ const SubmitCardSortModal = ({
   );
 };
 
-export { SubmitCardSortModal };
+export { CardSortConfirmCompleteModal };

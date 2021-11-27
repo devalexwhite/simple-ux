@@ -2,8 +2,10 @@ import { CheckCircleIcon } from "@heroicons/react/outline";
 import { useEffect, useState } from "react";
 import ReactTooltip from "react-tooltip";
 import { CardSortCell } from "../../components/cardSortCell";
+import { CardSortConfirmCompleteModal } from "../../components/modals/cardSortConfirmCompleteModal";
 import { CardSortHelpModal } from "../../components/modals/cardSortHelpModal";
 import { CardSortIntroModal } from "../../components/modals/cardSortIntroModal";
+import { LoadingModal } from "../../components/modals/loadingModal";
 import { StudyLayout } from "../../templates/studyLayout";
 
 const sampleCards = [
@@ -106,6 +108,8 @@ const CardSortPage = ({ cards = sampleCards }) => {
 
   const [showHelp, setShowHelp] = useState(false);
   const [showIntro, setShowIntro] = useState(false);
+  const [showConfirmComplete, setShowConfirmComplete] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const assignCard = (cardId, cellId) => {
     const newCardStates = [...cardStates];
@@ -149,8 +153,30 @@ const CardSortPage = ({ cards = sampleCards }) => {
       return count === 0 || count > 1;
     });
 
+  const submitStudy = async () => {
+    setIsLoading(true);
+
+    try {
+      await fetch("/api/card-sort/submit", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          data: submitObject,
+        }),
+      });
+      router.push("/card-sort/congrats");
+    } catch (e) {
+      alert(`An error occurred: ${e.message}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
-    setShowIntro(true);
+    // setShowIntro(true);
   }, []);
 
   return (
@@ -162,7 +188,16 @@ const CardSortPage = ({ cards = sampleCards }) => {
           setShowHelp(true);
         }}
       />
+
+      <CardSortConfirmCompleteModal
+        open={showConfirmComplete}
+        setOpen={setShowConfirmComplete}
+        onConfirm={submitStudy}
+      />
+
       <CardSortHelpModal open={showHelp} setOpen={setShowHelp} />
+      <LoadingModal open={isLoading} />
+
       <div
         className={` w-full flex-1  overflow-auto max-w-7xl mx-auto sm:px-6 lg:px-8`}
       >
@@ -185,6 +220,7 @@ const CardSortPage = ({ cards = sampleCards }) => {
       <div className="flex items-center justify-center py-4 w-full left-0 bg-white border-t border-gray-300">
         <button
           type="button"
+          onClick={() => setShowConfirmComplete(true)}
           className={`inline-flex items-center px-12 py-5 border border-transparent text-lg font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${
             areAllCardsSorted() && "animate-pulse"
           }`}

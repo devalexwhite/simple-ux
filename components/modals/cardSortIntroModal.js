@@ -1,9 +1,6 @@
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import {
-  ArrowCircleRightIcon,
-  QuestionMarkCircleIcon,
-} from "@heroicons/react/outline";
+import { ArrowCircleRightIcon } from "@heroicons/react/outline";
 import { ReactSVG } from "react-svg";
 
 const CardSortIntroModal = ({ open, setOpen }) => {
