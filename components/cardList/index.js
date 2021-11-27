@@ -1,20 +1,26 @@
 import { PencilIcon } from "@heroicons/react/outline";
 import { useState } from "react";
 
-const CardList = ({ id, title, children, onListDrop, onEditTitle }) => {
+const CardList = ({ title, children, onCardDrop, setTitle }) => {
   const [isDragTarget, setIsDragTarget] = useState(false);
 
   const onDrop = (ev) => {
     ev.preventDefault();
     setIsDragTarget(false);
     const data = ev.dataTransfer.getData("text/plain");
-    onListDrop(data, id);
+    onCardDrop(data);
   };
 
   const onDragOver = (ev) => {
     ev.preventDefault();
     setIsDragTarget(true);
     ev.dataTransfer.dropEffect = "move";
+  };
+
+  const onClickTitle = () => {
+    const newTitle = prompt("What would you like to name this group?");
+
+    setTitle(newTitle);
   };
 
   return (
@@ -31,7 +37,7 @@ const CardList = ({ id, title, children, onListDrop, onEditTitle }) => {
       ></div>
       <button
         className="text-base text-blue-700 mb-2 font-medium flex items-center"
-        onClick={onEditTitle}
+        onClick={onClickTitle}
       >
         <PencilIcon width={16} className="mr-2" />
         {title}
@@ -40,6 +46,13 @@ const CardList = ({ id, title, children, onListDrop, onEditTitle }) => {
         {children.map((child) => (
           <div className={`mb-2 `}>{child}</div>
         ))}
+        {children.length === 0 && (
+          <div
+            className={`rounded-lg border-inset border-4 shadow-none border-dashed border-gray-200 bg-transparent w-full h-16 flex justify-center items-center text-sm font-bold text-gray-400`}
+          >
+            Drop to join group
+          </div>
+        )}
       </div>
     </div>
   );

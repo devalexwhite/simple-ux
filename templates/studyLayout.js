@@ -12,7 +12,7 @@ import { ReactSVG } from "react-svg";
 
 const StudyLayout = ({ children }) => {
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col">
+    <div className="min-h-screen bg-gray-100 flex flex-col overflow-hidden relative max-h-screen">
       <Disclosure as="nav" className="bg-white shadow">
         {({ open }) => (
           <>
@@ -43,9 +43,7 @@ const StudyLayout = ({ children }) => {
           </>
         )}
       </Disclosure>
-      <div className="flex-1 py-16 max-w-7xl mx-auto sm:px-6 lg:px-8">
-        {children}
-      </div>
+      <div className="flex-1 flex flex-col pt-16 max-h-full">{children}</div>
     </div>
   );
 };

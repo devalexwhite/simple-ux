@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { Card } from "../../components/card";
 import { CardList } from "../../components/cardList";
-import { DropZone } from "../../components/dropZone";
+import { DropZone } from "../../components/cardSortCell";
 import { CardSortSetListTitleModal } from "../../components/modals/cardSortSetListTitleModal";
 import { SubmitCardSortModal } from "../../components/modals/submitCardSortModal";
 import { StudyLayout } from "../../templates/studyLayout";

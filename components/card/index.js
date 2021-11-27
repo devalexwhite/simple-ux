@@ -1,5 +1,4 @@
 import { useState } from "react";
-import styles from "./card.module.css";
 
 const Card = ({ id, title, onCardDrop, isInList }) => {
   const [isDragging, setIsDragging] = useState(false);
@@ -21,7 +20,7 @@ const Card = ({ id, title, onCardDrop, isInList }) => {
     setIsDragTarget(false);
     setIsDragging(false);
     const data = ev.dataTransfer.getData("text/plain");
-    onCardDrop(data, id);
+    onCardDrop(data);
   };
 
   const onDragOver = (ev) => {
@@ -31,11 +30,12 @@ const Card = ({ id, title, onCardDrop, isInList }) => {
 
   return (
     <div
-      id={id}
       style={{ height: "fit-content" }}
-      className={`bg-white px-4 py-5 shadow rounded-lg border-gray-200 sm:px-6 cursor-move font-medium ${
+      className={`${
+        !isDragging && "bg-white"
+      } px-4 py-5 shadow rounded-lg border-gray-200 sm:px-6 cursor-move font-medium  ${
         isDragging &&
-        "border-inset border-4 shadow-none border-dashed border-gray-200 bg-transparent"
+        "border-inset border-4 shadow-none border-dashed border-gray-200 bg-transparent min-h-16"
       }
       ${isDragTarget && !isDragging && "bg-blue-200 text-blue-200 shadow-none"}
       `}
