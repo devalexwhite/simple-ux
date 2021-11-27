@@ -1,7 +1,9 @@
 import { CheckCircleIcon } from "@heroicons/react/outline";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ReactTooltip from "react-tooltip";
 import { CardSortCell } from "../../components/cardSortCell";
+import { CardSortHelpModal } from "../../components/modals/cardSortHelpModal";
+import { CardSortIntroModal } from "../../components/modals/cardSortIntroModal";
 import { StudyLayout } from "../../templates/studyLayout";
 
 const sampleCards = [
@@ -102,6 +104,9 @@ const CardSortPage = ({ cards = sampleCards }) => {
     }))
   );
 
+  const [showHelp, setShowHelp] = useState(false);
+  const [showIntro, setShowIntro] = useState(false);
+
   const assignCard = (cardId, cellId) => {
     const newCardStates = [...cardStates];
     const cardIndex = newCardStates.findIndex(
@@ -136,8 +141,20 @@ const CardSortPage = ({ cards = sampleCards }) => {
     setCellHash(newCellHash);
   };
 
+  useEffect(() => {
+    setShowIntro(true);
+  }, []);
+
   return (
-    <StudyLayout>
+    <StudyLayout setShowHelp={setShowHelp}>
+      <CardSortIntroModal
+        open={showIntro}
+        setOpen={() => {
+          setShowIntro(false);
+          setShowHelp(true);
+        }}
+      />
+      <CardSortHelpModal open={showHelp} setOpen={setShowHelp} />
       <div
         className={` w-full flex-1  overflow-auto max-w-7xl mx-auto sm:px-6 lg:px-8`}
       >
