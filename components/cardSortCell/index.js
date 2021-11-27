@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Card } from "../card";
 import { CardList } from "../cardList";
+import styles from "./cardSortCell.module.css";
 
 const CardSortCell = ({
   cards = [],
@@ -22,37 +23,24 @@ const CardSortCell = ({
 
   const onDragOver = (ev) => {
     ev.preventDefault();
+    setIsDragTarget(true);
     ev.dataTransfer.dropEffect = "move";
   };
 
   const cardObjects = cards.map((card, index) => (
-    <Card
-      key={card.id}
-      id={card.id}
-      card={card}
-      title={card.title}
-      onCardDrop={onCardDrop}
-    />
+    <Card key={card.id} id={card.id} title={card.title} />
   ));
 
   return (
     <div
       onDrop={onDrop}
-      onDragOver={onDragOver}
       onDragEnter={() => setIsDragTarget(true)}
       onDragLeave={() => setIsDragTarget(false)}
-      className={`
-        ${
-          isDragTarget &&
-          !isList &&
-          cardObjects.length === 0 &&
-          "rounded-lg shadow-none bg-blue-200 bg-transparent w-full h-16"
-        }
-      
-      `}
+      onDragOver={onDragOver}
+      className={` relative z-20 ${isDragTarget && styles.dragTarget}`}
     >
       {isList && (
-        <CardList title={title} onCardDrop={onCardDrop} setTitle={setTitle}>
+        <CardList title={title} setTitle={setTitle}>
           {cardObjects}
         </CardList>
       )}

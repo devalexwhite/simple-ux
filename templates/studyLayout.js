@@ -43,7 +43,9 @@ const StudyLayout = ({ children }) => {
           </>
         )}
       </Disclosure>
-      <div className="flex-1 flex flex-col pt-16 max-h-full">{children}</div>
+      <div className="flex-1 flex flex-col pt-16 max-h-full overflow-hidden">
+        {children}
+      </div>
     </div>
   );
 };

@@ -108,7 +108,10 @@ const CardSortPage = ({ cards = sampleCards }) => {
     );
 
     const oldCellId = newCardStates[cardIndex].cellId;
-    if (cardStates.filter((card) => card.cellId === oldCellId).length > 1) {
+    if (
+      oldCellId !== cellId &&
+      cardStates.filter((card) => card.cellId === oldCellId).length <= 2
+    ) {
       updateCellTitle(oldCellId, "Set group title");
     }
 
@@ -135,7 +138,7 @@ const CardSortPage = ({ cards = sampleCards }) => {
   return (
     <StudyLayout>
       <div
-        className={` w-full h-full max-h-full flex-1  overflow-hidden max-w-7xl mx-auto sm:px-6 lg:px-8`}
+        className={` w-full flex-1  overflow-auto max-w-7xl mx-auto sm:px-6 lg:px-8`}
       >
         <div className="h-full  grid grid-cols-5 w-full gap-8">
           {cellHash.map((cell, index) => (
