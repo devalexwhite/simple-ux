@@ -141,6 +141,14 @@ const CardSortPage = ({ cards = sampleCards }) => {
     setCellHash(newCellHash);
   };
 
+  const areAllCardsSorted = () =>
+    cellHash.every((cell) => {
+      const count = cardStates.filter(
+        (card) => `${card.cellId}` === `${cell.id}`
+      ).length;
+      return count === 0 || count > 1;
+    });
+
   useEffect(() => {
     setShowIntro(true);
   }, []);
@@ -177,7 +185,9 @@ const CardSortPage = ({ cards = sampleCards }) => {
       <div className="flex items-center justify-center py-4 w-full left-0 bg-white border-t border-gray-300">
         <button
           type="button"
-          className="inline-flex items-center px-12 py-5 border border-transparent text-lg font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          className={`inline-flex items-center px-12 py-5 border border-transparent text-lg font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${
+            areAllCardsSorted() && "animate-pulse"
+          }`}
         >
           <CheckCircleIcon width={26} className="mr-2" />
           I'm Done!
