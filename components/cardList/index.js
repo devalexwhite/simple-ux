@@ -1,7 +1,14 @@
-import { PencilIcon } from "@heroicons/react/outline";
-import { useState } from "react";
+import { LockClosedIcon, PencilIcon } from "@heroicons/react/outline";
+import { useEffect, useState } from "react";
+import ReactTooltip from "react-tooltip";
 
-const CardList = ({ title, children, setTitle }) => {
+const CardList = ({ title, children, setTitle, closed }) => {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const onClickTitle = () => {
     const newTitle = prompt("What would you like to name this group?");
 
@@ -10,13 +17,26 @@ const CardList = ({ title, children, setTitle }) => {
 
   return (
     <div className="flex flex-col relative">
-      <button
-        className="text-base text-blue-700 mb-2 font-medium flex items-center"
-        onClick={onClickTitle}
+      {mounted && <ReactTooltip place="top" type="info" effect="float" />}
+
+      <div
+        data-tip={closed ? `The title of this group cannot be changed.` : null}
       >
-        <PencilIcon width={16} className="mr-2" />
-        {title}
-      </button>
+        <button
+          className={`text-base mb-2 font-medium flex items-center relative ${
+            closed ? "text-gray-700 cursor-not-allowed" : "text-blue-700"
+          }`}
+          onClick={() => (closed ? () => {} : onClickTitle())}
+          disabled={closed}
+        >
+          {closed ? (
+            <LockClosedIcon width={16} className="mr-2" />
+          ) : (
+            <PencilIcon width={16} className="mr-2" />
+          )}
+          {title}
+        </button>
+      </div>
       <div className="relative">
         {children.map((child) => (
           <div className={`mb-2 `}>{child}</div>

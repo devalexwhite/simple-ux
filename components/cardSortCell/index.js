@@ -7,6 +7,7 @@ const CardSortCell = ({
   cards = [],
   isList = cards.length > 1,
   title = undefined,
+  closed = false,
   onCardDrop = () => {},
   setTitle = () => {},
 }) => {
@@ -37,10 +38,10 @@ const CardSortCell = ({
       onDragEnter={() => setIsDragTarget(true)}
       onDragLeave={() => setIsDragTarget(false)}
       onDragOver={onDragOver}
-      className={` relative z-20 ${isDragTarget && styles.dragTarget}`}
+      className={` relative ${isDragTarget && styles.dragTarget}`}
     >
       {isList && (
-        <CardList title={title} setTitle={setTitle}>
+        <CardList title={title} setTitle={setTitle} closed={closed}>
           {cardObjects}
         </CardList>
       )}

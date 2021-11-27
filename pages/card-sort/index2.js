@@ -1,5 +1,6 @@
 import { CheckCircleIcon } from "@heroicons/react/outline";
 import { useState } from "react";
+import ReactTooltip from "react-tooltip";
 import { CardSortCell } from "../../components/cardSortCell";
 import { StudyLayout } from "../../templates/studyLayout";
 
@@ -151,6 +152,7 @@ const CardSortPage = ({ cards = sampleCards }) => {
               }}
               cards={cardStates.filter((card) => card.cellId === cell.id) ?? []}
               onCardDrop={(card) => assignCard(card, cell.id)}
+              closed={cell?.closed ?? false}
             />
           ))}
         </div>
