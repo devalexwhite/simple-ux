@@ -6,6 +6,7 @@ import { CardSortConfirmCompleteModal } from "../../components/modals/cardSortCo
 import { CardSortHelpModal } from "../../components/modals/cardSortHelpModal";
 import { CardSortIntroModal } from "../../components/modals/cardSortIntroModal";
 import { LoadingModal } from "../../components/modals/loadingModal";
+import { StudyCompleteModal } from "../../components/modals/studyCompleteModal";
 import { StudyLayout } from "../../templates/studyLayout";
 
 const sampleCards = [
@@ -110,6 +111,7 @@ const CardSortPage = ({ cards = sampleCards }) => {
   const [showIntro, setShowIntro] = useState(false);
   const [showConfirmComplete, setShowConfirmComplete] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [showStudyCompleteModal, setShowStudyCompleteModal] = useState(false);
 
   const assignCard = (cardId, cellId) => {
     const newCardStates = [...cardStates];
@@ -156,27 +158,44 @@ const CardSortPage = ({ cards = sampleCards }) => {
   const submitStudy = async () => {
     setIsLoading(true);
 
+    const lists = cellHash.filter(
+      (cell) =>
+        cell.isList ||
+        cardStates.filter((card) => card.cellId === cell.id).length > 0
+    );
+
+    const data = lists.map((list) => ({
+      title: list.title ?? "No title",
+      closed: list.closed ?? false,
+      cards: cardStates
+        .filter((card) => card.cellId === list.id)
+        .map((card) => ({
+          id: card.id,
+          title: card.title,
+        })),
+    }));
+
     try {
-      await fetch("/api/card-sort/submit", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          data: submitObject,
-        }),
-      });
-      router.push("/card-sort/congrats");
+      // await fetch("/api/card-sort/submit", {
+      //   method: "POST",
+      //   headers: {
+      //     Accept: "application/json",
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     data: submitObject,
+      //   }),
+      // });
+      setIsLoading(false);
+      setShowStudyCompleteModal(true);
     } catch (e) {
-      alert(`An error occurred: ${e.message}`);
-    } finally {
+      alert(`An error occurred: ${e.message}. Please try again!`);
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    // setShowIntro(true);
+    setShowIntro(true);
   }, []);
 
   return (
@@ -188,20 +207,19 @@ const CardSortPage = ({ cards = sampleCards }) => {
           setShowHelp(true);
         }}
       />
-
       <CardSortConfirmCompleteModal
         open={showConfirmComplete}
         setOpen={setShowConfirmComplete}
         onConfirm={submitStudy}
       />
-
       <CardSortHelpModal open={showHelp} setOpen={setShowHelp} />
       <LoadingModal open={isLoading} />
+      <StudyCompleteModal open={showStudyCompleteModal} />
 
       <div
-        className={` w-full flex-1  overflow-auto max-w-7xl mx-auto sm:px-6 lg:px-8`}
+        className={` w-full flex-1  overflow-auto max-w-7xl mx-auto px-6 lg:px-8`}
       >
-        <div className="h-full  grid grid-cols-5 w-full gap-8">
+        <div className="h-full grid grid-cols-1 md:grid-cols-5 w-full gap-8">
           {cellHash.map((cell, index) => (
             <CardSortCell
               key={cell.id}

@@ -38,8 +38,10 @@ const CardList = ({ title, children, setTitle, closed }) => {
         </button>
       </div>
       <div className="relative">
-        {children.map((child) => (
-          <div className={`mb-2 `}>{child}</div>
+        {children.map((child, i) => (
+          <div key={i} className={`mb-2 `}>
+            {child}
+          </div>
         ))}
         {children.length === 0 && (
           <div
