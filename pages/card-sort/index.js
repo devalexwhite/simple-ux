@@ -170,22 +170,22 @@ const CardSortPage = ({ cards = sampleCards }) => {
       cards: cardStates
         .filter((card) => card.cellId === list.id)
         .map((card) => ({
-          id: card.id,
+          id: `${card.id}`,
           title: card.title,
         })),
     }));
 
     try {
-      // await fetch("/api/card-sort/submit", {
-      //   method: "POST",
-      //   headers: {
-      //     Accept: "application/json",
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     data: submitObject,
-      //   }),
-      // });
+      await fetch("/api/card-sort/submit", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          data,
+        }),
+      });
       setIsLoading(false);
       setShowStudyCompleteModal(true);
     } catch (e) {
