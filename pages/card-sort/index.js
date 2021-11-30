@@ -1,97 +1,179 @@
-import { useRouter } from "next/router";
-import { useState } from "react";
-import { Card } from "../../components/card";
-import { CardList } from "../../components/cardList";
-import { DropZone } from "../../components/dropZone";
-import { SubmitCardSortModal } from "../../components/modals/submitCardSortModal";
+import { CheckCircleIcon } from "@heroicons/react/outline";
+import { useEffect, useState } from "react";
+import ReactTooltip from "react-tooltip";
+import { CardSortCell } from "../../components/cardSortCell";
+import { CardSortConfirmCompleteModal } from "../../components/modals/cardSortConfirmCompleteModal";
+import { CardSortHelpModal } from "../../components/modals/cardSortHelpModal";
+import { CardSortIntroModal } from "../../components/modals/cardSortIntroModal";
+import { LoadingModal } from "../../components/modals/loadingModal";
+import { StudyCompleteModal } from "../../components/modals/studyCompleteModal";
+import { StudyLayout } from "../../templates/studyLayout";
 
-const CardSort = () => {
-  const cards = [
-    {
-      id: "1",
-      title: "View results",
-    },
-    {
-      id: "2",
-      title: "Message participants",
-    },
-    {
-      id: "3",
-      title: "Create a new study",
-    },
-    {
-      id: "4",
-      title: "View feedback surveys",
-    },
-    {
-      id: "5",
-      title: "Log out of user account",
-    },
-    {
-      id: "6",
-      title: "Edit profile name",
-    },
-    {
-      id: "7",
-      title: "Change email address",
-    },
-    {
-      id: "8",
-      title: "Data analytics dashboard",
-    },
-    {
-      id: "9",
-      title: "Contact support",
-    },
-    {
-      id: "10",
-      title: "Review notifications",
-    },
-  ];
+const sampleCards = [
+  {
+    id: 1,
+    title: "Action",
+  },
+  {
+    id: 2,
+    title: "Agressive",
+  },
+  {
+    id: 3,
+    title: "Angry",
+  },
+  {
+    id: 4,
+    title: "Inspirational",
+  },
+  {
+    id: 5,
+    title: "Powerful",
+  },
+  {
+    id: 6,
+    title: "Upbeat",
+  },
+  {
+    id: 7,
+    title: "Exciting",
+  },
+  {
+    id: 8,
+    title: "Soft",
+  },
+  {
+    id: 9,
+    title: "Romantic",
+  },
+  {
+    id: 10,
+    title: "Playful",
+  },
+  {
+    id: 11,
+    title: "Beautiful",
+  },
+  {
+    id: 12,
+    title: "Carefree",
+  },
+  {
+    id: 13,
+    title: "Hypnotic",
+  },
+  {
+    id: 14,
+    title: "Scary",
+  },
+  {
+    id: 15,
+    title: "Suspense",
+  },
+  {
+    id: 16,
+    title: "Funny",
+  },
+];
 
-  const [listCount, setListCount] = useState(1);
-  const router = useRouter();
+const sampleLists = [
+  {
+    id: 1,
+    title: "Happy",
+    closed: true,
+  },
+];
 
-  const [submitDialogOpen, setSubmitDialogOpen] = useState(false);
-
-  const [lists, setLists] = useState([
-    // {
-    //   id: "0",
-    //   title: "Men's Clothing",
-    //   locked: true,
-    //   cards: [],
-    // },
+const CardSortPage = ({ cards = sampleCards }) => {
+  const [cellHash, setCellHash] = useState([
+    ...sampleLists.map((list, index) => ({
+      id: index,
+      title: list.title,
+      closed: list.closed,
+      isList: true,
+    })),
+    ...cards.map((card, index) => ({
+      id: index + sampleLists.length + 1,
+    })),
+    {
+      id: sampleLists.length + cards.length + 1,
+    },
   ]);
 
-  const onSubmit = () => {
-    const inGroups = cardsInList();
-    const hasRCards = inGroups.length < cards.length;
+  const [cardStates, setCardStates] = useState(
+    cards.map((card, index) => ({
+      ...card,
+      cellId: index + sampleLists.length + 1,
+    }))
+  );
 
-    if (hasRCards > 0) setSubmitDialogOpen(true);
-    else processSubmit();
+  const [showHelp, setShowHelp] = useState(false);
+  const [showIntro, setShowIntro] = useState(false);
+  const [showConfirmComplete, setShowConfirmComplete] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [showStudyCompleteModal, setShowStudyCompleteModal] = useState(false);
+
+  const assignCard = (cardId, cellId) => {
+    const newCardStates = [...cardStates];
+    const cardIndex = newCardStates.findIndex(
+      (card) => `${card.id}` === `${cardId}`
+    );
+
+    const oldCellId = newCardStates[cardIndex].cellId;
+    if (
+      oldCellId !== cellId &&
+      cardStates.filter((card) => card.cellId === oldCellId).length <= 2
+    ) {
+      updateCellTitle(oldCellId, "Set group title");
+    }
+
+    newCardStates[cardIndex].cellId = cellId;
+    setCardStates(newCardStates);
+
+    const newCellHash = [...cellHash];
+    const cellIndex = newCellHash.findIndex(
+      (cell) => `${cell.id}` === `${cellId}`
+    );
+    newCellHash[cellIndex].title =
+      newCellHash[cellIndex].title || "Set group title";
   };
 
-  const processSubmit = async () => {
-    const inGroups = cardsInList();
-    const hasRCards = inGroups.length < cards.length;
+  const updateCellTitle = (cellId, title) => {
+    const newCellHash = [...cellHash];
+    const cellIndex = newCellHash.findIndex(
+      (cell) => `${cell.id}` === `${cellId}`
+    );
+    newCellHash[cellIndex].title = title;
+    setCellHash(newCellHash);
+  };
 
-    const findCard = (id) => cards.find((i) => i.id === id);
-
-    const submitObject = lists.map((list) => {
-      return {
-        title: list.title,
-        isUserGroup: !list.locked,
-        cards: list.cards.map((id) => findCard(id)),
-      };
+  const areAllCardsSorted = () =>
+    cellHash.every((cell) => {
+      const count = cardStates.filter(
+        (card) => `${card.cellId}` === `${cell.id}`
+      ).length;
+      return count === 0 || count > 1;
     });
 
-    if (hasRCards) {
-      submitObject.push({
-        title: "No Group",
-        isUserGroup: false,
-        cards: cards.filter((i) => !inGroups.includes(i.id)),
-      });
-    }
+  const submitStudy = async () => {
+    setIsLoading(true);
+
+    const lists = cellHash.filter(
+      (cell) =>
+        cell.isList ||
+        cardStates.filter((card) => card.cellId === cell.id).length > 0
+    );
+
+    const data = lists.map((list) => ({
+      title: list.title ?? "No title",
+      closed: list.closed ?? false,
+      cards: cardStates
+        .filter((card) => card.cellId === list.id)
+        .map((card) => ({
+          id: `${card.id}`,
+          title: card.title,
+        })),
+    }));
 
     try {
       await fetch("/api/card-sort/submit", {
@@ -101,148 +183,72 @@ const CardSort = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          cards: submitObject,
+          data,
         }),
       });
-      router.push("/card-sort/congrats");
+      setIsLoading(false);
+      setShowStudyCompleteModal(true);
     } catch (e) {
-      alert(`An error occurred: ${e.message}`);
+      alert(`An error occurred: ${e.message}. Please try again!`);
+      setIsLoading(false);
     }
   };
 
-  const cardsInList = () => lists.reduce((p, c) => [...p, ...c.cards], []);
-
-  const onChangeListTitle = (id, title) => {
-    setLists(
-      lists.map((list) => {
-        if (id === list.id) {
-          return {
-            ...list,
-            title,
-          };
-        } else return list;
-      })
-    );
-  };
-
-  const onListDelete = (key) => {
-    if (confirm("Delete this group?"))
-      setLists(lists.filter((i) => i.id !== key));
-  };
-
-  const onZoneCardDrop = (ev) => {
-    ev.preventDefault();
-
-    if (ev.dataTransfer.dropped) return;
-    ev.dataTransfer.dropped = true;
-
-    const cardId = ev.dataTransfer.getData("text/plain");
-
-    setLists([
-      ...lists.map((i) => ({
-        ...i,
-        cards: [...i.cards.filter((c) => c != cardId)],
-      })),
-      {
-        id: `${listCount}`,
-        title: "",
-        cards: [cardId],
-        locked: false,
-      },
-    ]);
-
-    setListCount(listCount + 1);
-  };
-
-  const onListCardDrop = (listId, ev) => {
-    ev.preventDefault();
-
-    if (ev.dataTransfer.dropped) return;
-
-    ev.dataTransfer.dropped = true;
-
-    const cardId = ev.dataTransfer.getData("text/plain");
-
-    const list = lists.find((i) => i.id === listId);
-
-    setLists(
-      lists.map((list) => {
-        if (list.id == listId)
-          return {
-            ...list,
-            cards: [...list.cards, cardId],
-          };
-        else
-          return {
-            ...list,
-            cards: list.cards.filter((i) => i != cardId),
-          };
-      })
-    );
-
-    if (list) list.cards.push(cardId);
-  };
+  useEffect(() => {
+    setShowIntro(true);
+  }, []);
 
   return (
-    <div className="flex flex-col min-h-screen h-screen">
-      <SubmitCardSortModal
-        open={submitDialogOpen}
-        setOpen={setSubmitDialogOpen}
-        submitHandler={processSubmit}
-        cardsRemaining={cards.length - cardsInList().length}
+    <StudyLayout setShowHelp={setShowHelp}>
+      <CardSortIntroModal
+        open={showIntro}
+        setOpen={() => {
+          setShowIntro(false);
+          setShowHelp(true);
+        }}
       />
-      <div className="w-full py-4 px-4">
-        <div className="px-2 pb-4">
-          <span className="block font-medium">
-            Click and drag the cards below
-          </span>
-          <span className="font-bold text-sm text-secondary">
-            {cards.length - cardsInList().length} cards remaining
-          </span>
-        </div>
+      <CardSortConfirmCompleteModal
+        open={showConfirmComplete}
+        setOpen={setShowConfirmComplete}
+        onConfirm={submitStudy}
+      />
+      <CardSortHelpModal open={showHelp} setOpen={setShowHelp} />
+      <LoadingModal open={isLoading} />
+      <StudyCompleteModal open={showStudyCompleteModal} />
 
-        <div className="flex flex-row overflow-y-auto overflow-y-hidden w-full">
-          {cards
-            .filter((i) => !cardsInList().includes(i.id))
-            .map((i) => (
-              <Card title={i.title} id={i.id} key={i.id} />
-            ))}
-        </div>
-      </div>
-      <DropZone
-        id="card-dropzone"
-        className="z-0 flex-1 w-full  border-2 font-bold bg-base-300 text-center"
-        ondrop={onZoneCardDrop}
+      <div
+        className={` w-full flex-1  overflow-auto max-w-7xl mx-auto px-6 lg:px-8`}
       >
-        <div className="text-xl py-8">Drop here to form a new group</div>
-        <div className="flex flex-row overflow-y-auto">
-          {lists.map((i) => (
-            <div key={i.id}>
-              <CardList
-                id={i.id}
-                title={i.title}
-                onDrop={(ev) => onListCardDrop(i.id, ev)}
-                onDelete={onListDelete}
-                onChangeTitle={onChangeListTitle}
-                locked={i.locked}
-              >
-                {cards
-                  .filter((c) => i.cards.includes(c.id))
-                  .map((c) => (
-                    <Card title={c.title} id={c.id} key={c.key} />
-                  ))}
-              </CardList>
-            </div>
+        <div className="h-full grid grid-cols-1 md:grid-cols-5 w-full gap-8">
+          {cellHash.map((cell, index) => (
+            <CardSortCell
+              key={cell.id}
+              isList={cell?.isList}
+              title={cell?.title}
+              setTitle={(title) => {
+                updateCellTitle(cell.id, title);
+              }}
+              cards={cardStates.filter((card) => card.cellId === cell.id) ?? []}
+              onCardDrop={(card) => assignCard(card, cell.id)}
+              closed={cell?.closed ?? false}
+            />
           ))}
         </div>
-      </DropZone>
-      <div className="flex justify-center w-full px-8 py-4 border-t">
-        <button className="btn btn-primary btn-lg" onClick={onSubmit}>
-          {"I'm finished!"}
+      </div>
+      <div className="flex items-center justify-center py-4 w-full left-0 bg-white border-t border-gray-300">
+        <button
+          type="button"
+          onClick={() => setShowConfirmComplete(true)}
+          className={`inline-flex items-center px-12 py-5 border border-transparent text-lg font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${
+            areAllCardsSorted() && "animate-pulse"
+          }`}
+        >
+          <CheckCircleIcon width={26} className="mr-2" />
+          {`I'm Done!`}
         </button>
       </div>
-    </div>
+    </StudyLayout>
   );
 };
 
-export default CardSort;
+export default CardSortPage;

@@ -1,50 +1,57 @@
-import { DropZone } from "../dropZone";
-import styles from "./cardList.module.css";
+import { LockClosedIcon, PencilIcon } from "@heroicons/react/outline";
+import { useEffect, useState } from "react";
+import ReactTooltip from "react-tooltip";
 
-const CardList = ({
-  id,
-  title,
-  children,
-  onDrop,
-  onDelete,
-  onChangeTitle,
-  locked = false,
-}) => {
+const CardList = ({ title, children, setTitle, closed }) => {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const onClickTitle = () => {
+    const newTitle = prompt("What would you like to name this group?");
+
+    setTitle(newTitle);
+  };
+
   return (
-    <DropZone
-      className={`z-10 border-2 flex flex-col bg-base-100 px-4 py-4 m-4 items-center ${styles.container}`}
-      ondrop={onDrop}
-      id={id}
-    >
-      <input
-        className={`input-secondary input ${
-          locked ? "input-ghost" : "input-bordered"
-        } w-full text-center w-full`}
-        type="text"
-        placeholder="Click to set a title"
-        onChange={(e) => onChangeTitle(id, e.target.value)}
-        value={title}
-        autoFocus
-        disabled={locked}
-      />
-      <div className={`flex-1 flex flex-col w-full  text-center py-8`}>
-        {children.length ? (
-          children
-        ) : (
-          <span className="w-full h-full flex justify-center items-center font-bold text-sm py-8">
-            Drop here to join this group
-          </span>
+    <div className="flex flex-col relative">
+      {mounted && <ReactTooltip place="top" type="info" effect="float" />}
+
+      <div
+        data-tip={closed ? `The title of this group cannot be changed.` : null}
+      >
+        <button
+          className={`text-base mb-2 font-medium flex items-center relative ${
+            closed ? "text-gray-700 cursor-not-allowed" : "text-blue-700"
+          }`}
+          onClick={() => (closed ? () => {} : onClickTitle())}
+          disabled={closed}
+        >
+          {closed ? (
+            <LockClosedIcon width={16} className="mr-2" />
+          ) : (
+            <PencilIcon width={16} className="mr-2" />
+          )}
+          {title}
+        </button>
+      </div>
+      <div className="relative">
+        {children.map((child, i) => (
+          <div key={i} className={`mb-2 `}>
+            {child}
+          </div>
+        ))}
+        {children.length === 0 && (
+          <div
+            className={`rounded-lg border-inset border-4 shadow-none border-dashed border-gray-200 bg-transparent w-full h-16 flex justify-center items-center text-sm font-bold text-gray-400`}
+          >
+            Drop to join group
+          </div>
         )}
       </div>
-      {!locked && (
-        <button
-          className="btn btn-sm btn-warning w-full"
-          onClick={() => onDelete(id)}
-        >
-          Delete group
-        </button>
-      )}
-    </DropZone>
+    </div>
   );
 };
 

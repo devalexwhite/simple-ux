@@ -6,7 +6,6 @@ export default function handler(req, res) {
   var client = new faunadb.Client({
     secret: process.env.FAUNA_ADMIN_KEY,
     domain: "db.fauna.com",
-    // NOTE: Use the correct domain for your database's Region Group.
     port: 443,
     scheme: "https",
   });

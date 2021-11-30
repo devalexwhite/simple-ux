@@ -1,9 +1,12 @@
 {
   "extends": "next/core-web-vitals",
-  "overrides": [{
-    "files": ["*.js"],
-    "rules": {
-      "react/no-string-refs": "off"
+  "overrides": [
+    {
+      "files": ["*.js"],
+      "rules": {
+        "react/no-string-refs": "off",
+        "@next/next/no-img-element": "off"
+      }
     }
-  }]
+  ]
 }

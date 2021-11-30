@@ -1,19 +1,29 @@
-import styles from "./card.module.css";
+import { useState } from "react";
 
 const Card = ({ id, title }) => {
-  const ondragstart = (ev) => {
-    ev.dataTransfer.setData("text/plain", ev.target.id);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const onDragStart = (ev) => {
+    ev.dataTransfer.setData("text/plain", id);
     ev.dataTransfer.dropEffect = "move";
   };
 
   return (
     <div
-      id={id}
-      className={`font-normal cursor-move bg-base-200 border rounded inline-block py-4 px-2 flex justify-center items-center text-center text-sm shadow m-2 ${styles.card}`}
+      style={{ height: "fit-content" }}
+      className={`${
+        !isDragging && "bg-white"
+      } px-4 py-5 shadow rounded-lg border-gray-200 sm:px-6 cursor-move font-medium  ${
+        isDragging &&
+        "border-inset border-4 shadow-none border-dashed border-gray-200 bg-transparent min-h-16"
+      }
+      `}
       draggable={true}
-      onDragStart={ondragstart}
+      onDragStart={onDragStart}
+      onDrag={() => setIsDragging(true)}
+      onDragEnd={() => setIsDragging(false)}
     >
-      {title}
+      {!isDragging && title}
     </div>
   );
 };
