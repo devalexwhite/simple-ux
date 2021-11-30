@@ -52,11 +52,11 @@ const CardSortHelpModal = ({ open, setOpen }) => {
                 <div className="mt-3 text-left sm:mt-5">
                   <div className="mt-2 max-w-lg mx-auto">
                     <h2 className="text-lg leading-6 font-medium text-gray-900 text-center">
-                      What should I do?
+                      {`What should I do?`}
                     </h2>
                     <p className="text-base text-gray-500">
-                      Your task is to group the terms on the board in whatever
-                      way makes sense to you. There is no right or wrong answer!
+                      {`Your task is to group the terms on the board in whatever
+                      way makes sense to you. There is no right or wrong answer!`}
                     </p>
                   </div>
                   <div className="mt-2 max-w-lg mx-auto">
@@ -68,11 +68,11 @@ const CardSortHelpModal = ({ open, setOpen }) => {
                       />
                     </a>
                     <h2 className="text-lg leading-6 font-medium text-gray-900 text-center">
-                      How do I do that?
+                      {`How do I do that?`}
                     </h2>
                     <p className="text-base text-gray-500">
-                      Drag and drop similiar cards on top of each other to group
-                      them. Click the title to name your group.
+                      {`Drag and drop similiar cards on top of each other to group
+                      them. Click the title to name your group.`}
                     </p>
                   </div>
                 </div>
@@ -83,7 +83,7 @@ const CardSortHelpModal = ({ open, setOpen }) => {
                   className="inline-flex justify-center items-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
                   onClick={() => setOpen(false)}
                 >
-                  Got it!
+                  {`Got it!`}
                   <CheckCircleIcon className="ml-2" width={20} />
                 </button>
               </div>

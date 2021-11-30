@@ -63,14 +63,14 @@ const CardSortConfirmCompleteModal = ({ open, setOpen, onConfirm }) => {
                   </Dialog.Title>
                   <div className="mt-2">
                     <p className="text-base text-gray-500">
-                      Thank you for participating in this study, your response
-                      makes a big difference!
+                      {`Thank you for participating in this study, your response
+                      makes a big difference!`}
                     </p>
                   </div>
                   <div className="mt-2">
                     <p className="text-base text-gray-500">
-                      After clicking "Submit", your results will be sent to the
-                      researcher that created the study.
+                      {`After clicking "Submit", your results will be sent to the
+                      researcher that created the study.`}
                     </p>
                   </div>
                 </div>
@@ -84,7 +84,7 @@ const CardSortConfirmCompleteModal = ({ open, setOpen, onConfirm }) => {
                     onConfirm();
                   }}
                 >
-                  Submit
+                  {`Submit`}
                 </button>
                 <button
                   type="button"
@@ -92,7 +92,7 @@ const CardSortConfirmCompleteModal = ({ open, setOpen, onConfirm }) => {
                   onClick={() => setOpen(false)}
                   ref={cancelButtonRef}
                 >
-                  Cancel
+                  {`Cancel`}
                 </button>
               </div>
             </div>

@@ -55,13 +55,13 @@ const CardSortIntroModal = ({ open, setOpen }) => {
                     as="h3"
                     className="text-lg leading-6 font-medium text-gray-900"
                   >
-                    Welcome!
+                    {`Welcome!`}
                   </Dialog.Title>
                   <div className="mt-2">
                     <p className="text-base text-gray-500">
-                      You've been invited to participate in a research study.
-                      This study should take no more than{" "}
-                      <strong>10 minutes to complete.</strong>
+                      {`You've been invited to participate in a research study.
+                      This study should take no more than `}
+                      <strong>{`10 minutes to complete.`}</strong>
                     </p>
                   </div>
                 </div>
@@ -72,7 +72,7 @@ const CardSortIntroModal = ({ open, setOpen }) => {
                   className="inline-flex justify-center items-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
                   onClick={() => setOpen(false)}
                 >
-                  Next
+                  {`Next`}
                   <ArrowCircleRightIcon className="ml-2" width={20} />
                 </button>
               </div>

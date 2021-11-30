@@ -244,7 +244,7 @@ const CardSortPage = ({ cards = sampleCards }) => {
           }`}
         >
           <CheckCircleIcon width={26} className="mr-2" />
-          I'm Done!
+          {`I'm Done!`}
         </button>
       </div>
     </StudyLayout>
