@@ -167,7 +167,7 @@ const Home = () => {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 className="w-full rounded-md shadow-xl ring-1 ring-black ring-opacity-5  lg:h-full lg:w-auto lg:max-w-none"
-                src="/card-sort-screenshot.png"
+                src="/card-sort-screenshot.jpeg"
                 alt="Screenshot of the card sorting tool created by SimpleUX"
               />
             </div>
