@@ -5,7 +5,9 @@ module.exports = {
     extend: {},
   },
   variants: {
-    extend: {},
+    extend: {
+      visibility: ["group-hover", "hover"],
+    },
   },
   plugins: [require("@tailwindcss/typography"), require("@tailwindcss/forms")],
 };
